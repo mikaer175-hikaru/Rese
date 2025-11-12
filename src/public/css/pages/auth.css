@@ -1,0 +1,50 @@
+/* public/css/pages/auth.css */
+.p-auth {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.p-auth__title {
+    margin: 0 0 12px;
+}
+
+/* フォーム共通（必要最小限） */
+.c-form {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.c-form__field {
+    margin-bottom: 12px;
+}
+
+.c-form__label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+/* 入力・エラー（components.cssの上に差分だけ） */
+.c-input.is-invalid {
+    border-color: #e11d48;
+}
+
+.c-form__error {
+    margin-top: 6px;
+    color: #e11d48;
+    font-size: 13px;
+}
+
+/* 通知（verifyで使う） */
+.c-flash {
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin: 0 0 12px;
+}
+
+.c-flash--success {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+}

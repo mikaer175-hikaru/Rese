@@ -1,0 +1,194 @@
+/* public/css/pages/shop-show.css */
+/* ============ Layout ============ */
+.p-shop-detail {
+    max-width: 1080px;
+    margin: 24px auto;
+    padding: 0 16px;
+    color: #111;
+}
+
+.p-shop-detail__head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 24px;
+}
+
+.p-shop-detail__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.p-shop-detail__summary {}
+
+.p-shop-detail__title {
+    margin: 0 0 6px;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+.p-shop-detail__meta {
+    margin: 0 0 10px;
+    color: #666;
+    font-size: 14px;
+}
+
+.p-shop-detail__desc {
+    margin: 0;
+    line-height: 1.8;
+}
+
+.p-shop-detail__body {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 24px;
+}
+
+.p-shop-detail__col {}
+
+.p-shop-detail__col--main {}
+
+.p-shop-detail__col--form {}
+
+.p-shop-detail__subtitle {
+    margin: 0 0 12px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ============ Form ============ */
+.c-form {
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.c-form__field {
+    display: grid;
+    gap: 6px;
+}
+
+.c-form__label {
+    font-size: 14px;
+    color: #333;
+}
+
+.c-input,
+.c-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    font: inherit;
+}
+
+.c-input:focus,
+.c-textarea:focus {
+    outline: none;
+    border-color: #aaa;
+    box-shadow: 0 0 0 3px rgba(34, 34, 34, 0.06);
+}
+
+.c-form__error {
+    margin: 2px 0 0;
+    color: #d33;
+    font-size: 13px;
+}
+
+/* ============ Buttons ============ */
+.c-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid #111;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.c-button--primary {}
+
+/* ============ Reserve Preview ============ */
+.p-shop-detail__reserve-preview {
+    margin-top: 6px;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.p-shop-detail__reserve-preview-title {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.p-shop-detail__reserve-list {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+}
+
+.p-shop-detail__reserve-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 8px;
+    font-size: 14px;
+}
+
+/* ============ Sign in notice ============ */
+.p-shop-detail__signin {
+    margin: 0;
+    padding: 16px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    background: #fff;
+}
+
+/* ============ Future reservations ============ */
+.p-shop-detail__future {
+    margin-top: 28px;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+}
+
+.p-shop-detail__future-item {
+    margin: 6px 0;
+    padding: 8px 10px;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 14px;
+}
+
+.p-shop-detail__future-empty {
+    margin: 6px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 960px) {
+    .p-shop-detail__head {
+        grid-template-columns: 1fr;
+    }
+
+    .p-shop-detail__body {
+        grid-template-columns: 1fr;
+    }
+}

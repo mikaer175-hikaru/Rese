@@ -35,6 +35,5 @@
     <footer class="c-footer">
         <small class="c-footer__copy">© Rese</small>
     </footer>
-    @yield('js')
 </body>
 </html>

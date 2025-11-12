@@ -1,0 +1,258 @@
+/* public/css/pages/shops-index.css */
+/* ========= Shop List (BEM) ========= */
+.p-shop-list {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 16px;
+    color: #111;
+}
+
+.p-shop-list__title {
+    margin: 0 0 16px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.p-shop-list__pager {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ========== Filter ========== */
+.c-filter {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.c-filter__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr auto;
+    gap: 12px;
+}
+
+.c-filter__field {}
+
+.c-filter__field--grow {
+    width: 100%;
+}
+
+.c-filter__label {
+    display: block;
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.c-input,
+.c-select {
+    width: 100%;
+    height: 38px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    line-height: 1.2;
+}
+
+.c-input:focus,
+.c-select:focus {
+    outline: 2px solid #8ec5ff;
+    outline-offset: 2px;
+    border-color: #8ec5ff;
+}
+
+.c-filter__actions {
+    display: flex;
+    align-items: end;
+    gap: 8px;
+}
+
+/* ========== Buttons ========== */
+.c-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #111;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.c-button:hover {
+    filter: brightness(1.05);
+}
+
+.c-button:focus {
+    outline: 2px solid #8ec5ff;
+    outline-offset: 2px;
+}
+
+.c-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.c-button--ghost {
+    background: #fff;
+    color: #111;
+    border-color: #ddd;
+}
+
+/* ========== Card Grid ========== */
+.c-card-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.c-card-grid__item {}
+
+/* ========== Card ========== */
+.c-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.c-card__media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: #f2f3f5;
+}
+
+.c-card__body {
+    padding: 12px;
+    display: grid;
+    gap: 6px;
+}
+
+.c-card__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.c-card__meta {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.c-card__text {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.c-card__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* ========== Empty message ========== */
+.p-shop-list__empty {
+    grid-column: 1 / -1;
+    padding: 24px;
+    text-align: center;
+    color: #666;
+    background: #fff;
+    border: 1px dashed #ddd;
+    border-radius: 12px;
+}
+
+/* ========== Pagination (Laravel default markup) ========== */
+.pagination {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+}
+
+.pagination li>span,
+.pagination li>a {
+    display: inline-flex;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #111;
+    background: #fff;
+    font-size: 14px;
+}
+
+.pagination li>a:hover {
+    filter: brightness(1.03);
+}
+
+.pagination .active>span {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+.pagination .disabled>span,
+.pagination .disabled>a {
+    opacity: .5;
+    pointer-events: none;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 1024px) {
+    .c-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .c-filter__row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .c-filter__actions {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 640px) {
+    .c-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .p-shop-list__title {
+        font-size: 18px;
+    }
+
+    .c-filter {
+        padding: 10px;
+    }
+
+    .c-filter__row {
+        grid-template-columns: 1fr;
+    }
+}

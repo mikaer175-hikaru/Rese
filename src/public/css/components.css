@@ -1,0 +1,228 @@
+/* public/css/components.css */
+
+/* ========= Design tokens ========= */
+:root {
+    --c-bg: #fff;
+    --c-text: #111;
+    --c-muted: #666;
+    --c-border: #ddd;
+    --c-border-strong: #bbb;
+    --c-primary: #2563eb;
+    --c-danger: #ef4444;
+    --c-focus: rgba(37, 99, 235, .15);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 16px rgba(0, 0, 0, .06);
+}
+
+/* ========= Buttons ========= */
+.c-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--c-border);
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .02s ease, box-shadow .15s ease, filter .15s ease;
+}
+
+.c-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--c-focus);
+}
+
+.c-button:active {
+    transform: translateY(1px);
+}
+
+.c-button--primary {
+    background: var(--c-primary);
+    border-color: var(--c-primary);
+    color: #fff;
+}
+
+.c-button--ghost {
+    background: #fff;
+    color: var(--c-text);
+}
+
+.c-button--danger {
+    background: var(--c-danger);
+    border-color: var(--c-danger);
+    color: #fff;
+}
+
+/* ========= Form controls ========= */
+.c-form {
+    background: var(--c-bg);
+    border: 1px solid #eee;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+
+.c-form__field {
+    margin-bottom: 12px;
+}
+
+.c-form__label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.c-input,
+.c-select,
+.c-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--c-text);
+    font-size: 16px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.c-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.c-input:focus,
+.c-select:focus,
+.c-textarea:focus {
+    outline: none;
+    border-color: var(--c-primary);
+    box-shadow: 0 0 0 3px var(--c-focus);
+}
+
+.is-invalid {
+    border-color: #e11d48 !important;
+}
+
+.c-form__error {
+    margin-top: 6px;
+    color: #e11d48;
+    font-size: 13px;
+}
+
+/* インライン行（例: remember とリンクを横並び） */
+.c-form__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ========= Flash messages ========= */
+.c-flash {
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    margin: 0 0 12px;
+    border: 1px solid transparent;
+}
+
+.c-flash--success {
+    background: #f0fdf4;
+    border-color: #86efac;
+}
+
+.c-flash--error {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.c-flash__list {
+    margin: 6px 0 0;
+    padding-left: 18px;
+}
+
+/* ========= Cards ========= */
+.c-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-shadow: var(--shadow);
+}
+
+.c-card__media {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.c-card__body {
+    padding: 12px;
+}
+
+.c-card__title {
+    margin: 0 0 4px;
+    font-size: 18px;
+}
+
+.c-card__meta {
+    margin: 0 0 8px;
+    color: var(--c-muted);
+    font-size: 13px;
+}
+
+.c-card__text {
+    margin: 0 0 12px;
+    color: #333;
+}
+
+.c-card__actions {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+}
+
+/* カードグリッド（必要なら各ページCSSで上書き可） */
+.c-card-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 16px;
+}
+
+@media (min-width: 640px) {
+    .c-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 960px) {
+    .c-card-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ========= Header links active helper ========= */
+.is-active {
+    border-bottom: 2px solid #111;
+}
+
+/* ========= Utilities ========= */
+.u-mt {
+    margin-top: 12px;
+}
+
+.u-mb {
+    margin-bottom: 12px;
+}
+
+.u-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
