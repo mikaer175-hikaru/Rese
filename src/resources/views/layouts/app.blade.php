@@ -7,7 +7,6 @@
     <title>@yield('title','Rese')</title>
     <link rel="stylesheet" href="{{ asset('css/base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
     @yield('css')
 </head>
 <body class="l-body">

@@ -24,7 +24,11 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.p-shop-detail__summary {}
+/* 評価表示 */
+.p-shop-detail__rating {
+    margin: 8px 0 0;
+    font-weight: 600;
+}
 
 .p-shop-detail__title {
     margin: 0 0 6px;
@@ -106,6 +110,10 @@
     font-size: 13px;
 }
 
+.c-radio {
+    margin-right: 12px;
+}
+
 /* ============ Buttons ============ */
 .c-button {
     display: inline-flex;
@@ -124,6 +132,10 @@
 .c-button--primary {}
 
 /* ============ Reserve Preview ============ */
+.p-shop-detail__reviews {
+    margin-top: 24px;
+}
+
 .p-shop-detail__reserve-preview {
     margin-top: 6px;
     padding: 12px;
@@ -138,17 +150,39 @@
     color: #555;
 }
 
-.p-shop-detail__reserve-list {
-    display: grid;
-    gap: 6px;
+.p-shop-detail__review-list {
     margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
 }
 
-.p-shop-detail__reserve-item {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 8px;
+.p-shop-detail__review-item {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background: #fff;
+    padding: 10px 12px;
+}
+
+.p-shop-detail__review-head {
+    display: flex;
+    gap: 10px;
+    align-items: center;
     font-size: 14px;
+    color: #555;
+}
+
+.p-shop-detail__review-user {
+    color: #111;
+}
+
+.p-shop-detail__review-rating {
+    font-weight: 700;
+}
+
+.p-shop-detail__review-text {
+    margin: 6px 0 0;
 }
 
 /* ============ Sign in notice ============ */

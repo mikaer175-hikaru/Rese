@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Genre extends Model
 {
-    protected $fillable = [
-        'name',
-    ];
+    protected $fillable = ['name',];
 
     public $timestamps = false;
 

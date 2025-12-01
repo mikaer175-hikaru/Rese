@@ -22,12 +22,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage', fn () => view('mypage.index'))->name('mypage');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->whereNumber('shop')->group(function () {
     Route::post('/favorites/{shop}', [FavoriteController::class, 'store'])->name('favorites.store');
     Route::delete('/favorites/{shop}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
 });
 
 Route::post('/reservations', [ReservationController::class, 'store'])
+    ->middleware(['auth', 'verified'])
     ->name('reservations.store');
 
 Route::get('/done', [ReservationController::class, 'done'])

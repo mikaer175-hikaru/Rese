@@ -31,6 +31,11 @@ class Shop extends Model
         return $this->hasMany(Favorite::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     /** スコープ：店舗名の部分一致 */
     public function scopeNameLike($query, ?string $keyword)
     {

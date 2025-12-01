@@ -6,66 +6,60 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * 予約テーブル
-     * - 当日不可／未来時刻などの業務ルールは FormRequest 側で検証
-     * - DB では参照整合と検索効率を担保
-     */
     public function up(): void
     {
-        Schema::create('reservations', function (Blueprint $table) {
-            $table->id();
+        Schema::table('reservations', function (Blueprint $table) {
+            // 決済方法: none | card
+            $table->string('payment_method', 20)
+                ->default('none')
+                ->comment('支払い方法: none|card')
+                ->after('note');
 
-            // 予約者・店舗
-            $table->foreignId('user_id')->comment('予約したユーザーID')
-                ->constrained()->cascadeOnDelete();
-            $table->foreignId('shop_id')->comment('対象の店舗ID')
-                ->constrained()->cascadeOnDelete();
+            // 決済状態: unpaid | pending | paid | failed
+            $table->string('payment_status', 20)
+                ->default('unpaid')
+                ->comment('決済状態: unpaid|pending|paid|failed')
+                ->after('payment_method');
 
-            // 日付と時刻は分離（検索や集計の柔軟性を優先）
-            $table->date('reserve_date')->comment('予約日（YYYY-MM-DD）');
-            $table->time('reserve_time')->comment('予約時刻（HH:MM:SS）');
+            // 金額・通貨
+            $table->unsignedInteger('amount')
+                ->default(0)
+                ->comment('税込金額（JPYは1円単位）')
+                ->after('payment_status');
 
-            // 人数：アプリ側は 1〜20 を保証。DB は 0〜255 の範囲（unsignedTinyInteger）
-            $table->unsignedTinyInteger('number_of_people')->comment('予約人数（アプリで1〜20を保証）');
+            $table->string('currency', 8)
+                ->default('jpy')
+                ->comment('通貨')
+                ->after('amount');
 
-            // 任意メモ
-            $table->string('note', 255)->nullable()->comment('備考（任意）');
+            // Stripe ID
+            $table->string('stripe_payment_intent_id', 64)
+                ->nullable()
+                ->comment('Stripe PaymentIntent ID')
+                ->after('currency');
 
-            $table->timestamps();
+            $table->string('stripe_checkout_session_id', 64)
+                ->nullable()
+                ->comment('Stripe Checkout Session ID')
+                ->after('stripe_payment_intent_id');
 
-            // よく使う絞り込み用の複合インデックス
-            $table->index(['user_id', 'reserve_date'], 'idx_reservations_user_date');
-            $table->index(['shop_id', 'reserve_date', 'reserve_time'], 'idx_reservations_shop_datetime');
-
-            // もし「同一ユーザーが同一日時に二重予約不可」を厳格化したい場合は UNIQUE も検討可
-            // $table->unique(['user_id', 'reserve_date', 'reserve_time'], 'uk_user_datetime');
+            // よく使う絞り込み用
+            $table->index(['payment_status', 'shop_id'], 'idx_reservations_payment_status_shop');
         });
-
-        /**
-         * ーー 拡張案（任意）ーー
-         * 1) MySQL 8.0+ の CHECK 制約で 1〜20 をDB側でも保証したい場合：
-         *
-         * DB::statement("
-         *   ALTER TABLE reservations
-         *   ADD CONSTRAINT chk_reservations_people
-         *   CHECK (number_of_people BETWEEN 1 AND 20)
-         * ");
-         *
-         * 2) reserve_date + reserve_time を仮想の DATETIME 生成列にまとめて索引したい場合：
-         *    （MySQL 8 の generated column 利用。環境によりエラーになるため任意）
-         *
-         * DB::statement("
-         *   ALTER TABLE reservations
-         *   ADD COLUMN reserved_at DATETIME
-         *   GENERATED ALWAYS AS (STR_TO_DATE(CONCAT(reserve_date,' ',reserve_time), '%Y-%m-%d %H:%i:%s')) VIRTUAL
-         * ");
-         * DB::statement("CREATE INDEX idx_reservations_reserved_at ON reservations (reserved_at)");
-         */
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('reservations');
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->dropIndex('idx_reservations_payment_status_shop');
+            $table->dropColumn([
+                'payment_method',
+                'payment_status',
+                'amount',
+                'currency',
+                'stripe_payment_intent_id',
+                'stripe_checkout_session_id',
+            ]);
+        });
     }
 };

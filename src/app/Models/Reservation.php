@@ -15,6 +15,12 @@ class Reservation extends Model
         'reserve_time',
         'number_of_people',
         'note',
+        'payment_method',
+        'payment_status',
+        'amount',
+        'currency',
+        'stripe_payment_intent_id',
+        'stripe_checkout_session_id',
     ];
 
     protected $casts = [

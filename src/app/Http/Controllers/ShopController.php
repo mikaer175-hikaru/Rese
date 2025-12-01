@@ -16,7 +16,7 @@ class ShopController extends Controller
      */
     public function index(ShopIndexRequest $request)
     {
-        $safe = $request->safe(); // バリデ通過後の入力のみ
+        $safe = $request->safe();
 
         $q       = (string) ($safe->q ?? '');
         $areaId  = $safe->area ?? null;
@@ -25,9 +25,9 @@ class ShopController extends Controller
 
         $query = Shop::query()
             ->with(['area:id,name','genre:id,name'])
-            ->when(Auth::check(), fn($q2) =>
+            ->when(Auth::check(), fn ($q2) =>
                 $q2->withExists([
-                    'favorites as is_favorited' => fn($q3) => $q3->where('user_id', Auth::id())
+                    'favorites as is_favorited' => fn ($q3) => $q3->where('user_id', Auth::id()),
                 ])
             )
             ->nameLike($q)
@@ -49,16 +49,31 @@ class ShopController extends Controller
     }
 
     /**
-     * 店舗詳細
+     * 店舗詳細（平均評価/件数/直近コメント + 未来予約）
      */
     public function show(Shop $shop, Request $request)
     {
-        $shop->load(['area', 'genre']);
+        // 店舗の基本情報
+        $shop->load(['area:id,name', 'genre:id,name']);
 
+        // 平均評価と件数（小数第1位まで）
+        $shop->loadAvg('reviews', 'rating')
+             ->loadCount('reviews');
+        $avg   = $shop->reviews_avg_rating !== null ? round((float) $shop->reviews_avg_rating, 1) : null;
+        $count = (int) $shop->reviews_count;
+
+        // 直近コメント3件（ユーザー名付き）
+        $latestReviews = $shop->reviews()
+            ->with('user:id,name')
+            ->latest()
+            ->limit(3)
+            ->get();
+
+        // ログイン時のみ：自分の未来予約一覧
         $futureReservations = $request->user()
             ? $request->user()
                 ->reservations()
-                ->with('shop')
+                ->with('shop:id,name')
                 ->future()
                 ->orderBy('reserve_date')
                 ->orderBy('reserve_time')
@@ -67,8 +82,10 @@ class ShopController extends Controller
 
         return view('shops.show', [
             'shop'               => $shop,
+            'avg'                => $avg,
+            'count'              => $count,
+            'latestReviews'      => $latestReviews,
             'futureReservations' => $futureReservations,
         ]);
     }
 }
-

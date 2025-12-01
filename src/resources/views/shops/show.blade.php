@@ -14,6 +14,9 @@
             <h1 id="shop-title" class="p-shop-detail__title">{{ $shop->name }}</h1>
             <p class="p-shop-detail__meta">#{{ $shop->area->name }} #{{ $shop->genre->name }}</p>
             <p class="p-shop-detail__desc">{{ $shop->description }}</p>
+            <p class="p-shop-detail__rating">
+                評価：{{ isset($avg) && $avg !== null ? number_format($avg, 1) : '—' }}（{{ $count ?? 0 }}件）
+            </p>
         </div>
     </div>
 
@@ -22,6 +25,26 @@
             <h2 class="p-shop-detail__subtitle">店舗情報</h2>
             {{-- 任意の追加情報 --}}
         </div>
+
+        @if(isset($latestReviews) && $latestReviews->isNotEmpty())
+        <section class="p-shop-detail__reviews" aria-label="直近の口コミ">
+            <h2 class="p-shop-detail__subtitle">直近の口コミ</h2>
+            <ul class="p-shop-detail__review-list">
+                @foreach($latestReviews as $rv)
+                    <li class="p-shop-detail__review-item">
+                        <div class="p-shop-detail__review-head">
+                            <strong class="p-shop-detail__review-user">{{ $rv->user->name }}</strong>
+                            <span class="p-shop-detail__review-rating">★ {{ $rv->rating }}</span>
+                            <span class="p-shop-detail__review-date">{{ $rv->created_at->format('Y/m/d') }}</span>
+                        </div>
+                        @if($rv->comment)
+                            <p class="p-shop-detail__review-text">{{ $rv->comment }}</p>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+        </section>
+        @endif
 
         <aside class="p-shop-detail__col p-shop-detail__col--form" aria-labelledby="reserve-title">
             <h2 id="reserve-title" class="p-shop-detail__subtitle">予約する</h2>
@@ -76,6 +99,13 @@
                     @error('note')<p class="c-form__error">{{ $message }}</p>@enderror
                 </div>
 
+                <div class="c-form__field">
+                    <span class="c-form__label">支払い方法</span>
+                    <label class="c-radio"><input type="radio" name="payment_method" value="none" {{ old('payment_method','none')==='none'?'checked':'' }}> 来店時に支払い</label>
+                    <label class="c-radio"><input type="radio" name="payment_method" value="card" {{ old('payment_method')==='card'?'checked':'' }}> オンライン決済（クレジットカード）</label>
+                    @error('payment_method')<p class="c-form__error">{{ $message }}</p>@enderror
+                </div>
+
                 {{-- 予約内容プレビュー --}}
                 <aside class="p-shop-detail__reserve-preview" aria-label="予約内容">
                     <h3 class="p-shop-detail__reserve-preview-title">予約内容</h3>
@@ -115,4 +145,3 @@
     @endauth
 </section>
 @endsection
-
