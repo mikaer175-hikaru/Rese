@@ -146,6 +146,25 @@
     box-shadow: var(--shadow);
 }
 
+.c-resv__edit {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    border-top: 1px dashed var(--border);
+    padding-top: 12px;
+}
+
+.c-resv__edit-summary {
+    display: inline-block;
+    margin: 0 0 10px;
+    cursor: pointer;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.c-resv__edit[open] .c-resv__edit-summary {
+    color: var(--text);
+}
+
 .c-resv__head {
     grid-column: 1 / -1;
     display: flex;

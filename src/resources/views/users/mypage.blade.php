@@ -26,36 +26,98 @@
         <input id="tab-fav" type="radio" name="tab" class="p-mypage__radio">
         <label for="tab-fav" class="p-mypage__tab" role="tab" aria-controls="panel-fav" aria-selected="false">お気に入り</label>
 
-        {{-- 予約一覧 --}}
-        <div class="p-mypage__panel" id="panel-res" role="tabpanel" aria-labelledby="tab-res">
-            @forelse ($reservations as $r)
-                <article class="c-resv" aria-labelledby="resv-{{ $r->id }}-title">
-                    <div class="c-resv__head">
-                        <h1 id="resv-{{ $r->id }}-title" class="c-resv__title">{{ $r->shop->name }}</h1>
-                        <span class="c-resv__date">
-                            {{ $r->reserve_date->format('Y/m/d') }}
-                            {{ \Carbon\Carbon::parse($r->reserve_time)->format('H:i') }}
-                        </span>
-                    </div>
+        {{-- 予約一覧（遷移なしで変更＆QR表示） --}}
+        <div class="p-mypage__panel" role="tabpanel" aria-labelledby="tab-res">
+        @forelse ($reservations as $r)
+            <article id="resv-{{ $r->id }}" class="c-resv" aria-labelledby="resv-{{ $r->id }}-title">
+            <div class="c-resv__head">
+                <h2 id="resv-{{ $r->id }}-title" class="c-resv__title">{{ $r->shop->name }}</h2>
+                <span class="c-resv__date">
+                {{ $r->reserve_date->format('Y/m/d') }}
+                {{ \Carbon\Carbon::parse($r->reserve_time)->format('H:i') }}
+                </span>
+            </div>
 
-                    <dl class="c-resv__list">
-                        <div class="c-resv__row"><dt>予約番号</dt><dd>予約{{ $r->id }}</dd></div>
-                        <div class="c-resv__row"><dt>人数</dt><dd>{{ $r->number_of_people }}名</dd></div>
-                    </dl>
+            <dl class="c-resv__list">
+                <div class="c-resv__row"><dt>予約番号</dt><dd>予約{{ $r->id }}</dd></div>
+                <div class="c-resv__row"><dt>人数</dt><dd>{{ $r->number_of_people }}名</dd></div>
+                <div class="c-resv__row"><dt>備考</dt><dd>{{ $r->note ?: '—' }}</dd></div>
+            </dl>
 
-                    <form action="{{ route('reservations.destroy', $r) }}" method="post" class="c-resv__actions">
-                        @csrf
-                        @method('delete')
-                        <button class="c-button c-button--danger" type="submit"
-                            aria-label="予約{{ $r->id }}を取り消す"
-                            onclick="return confirm('この予約を取り消しますか？')">
-                            予約を取消
-                        </button>
-                    </form>
-                </article>
-            @empty
-                <p class="p-mypage__empty">明日以降の予約はありません。</p>
-            @endforelse
+            <div class="c-resv__actions">
+                <button class="c-button c-button--ghost" type="button"
+                onclick="this.closest('.c-resv').querySelector('.c-resv__edit').open = !this.closest('.c-resv').querySelector('.c-resv__edit').open;">
+                編集
+                </button>
+
+                <button class="c-button c-button--ghost" type="button"
+                onclick="this.closest('.c-resv').querySelector('.c-resv__qr').open = !this.closest('.c-resv').querySelector('.c-resv__qr').open;">
+                QRを表示
+                </button>
+
+                <form action="{{ route('reservations.destroy', $r) }}" method="post">
+                @csrf @method('delete')
+                <button class="c-button c-button--danger" type="submit" onclick="return confirm('この予約を取り消しますか？')">
+                    予約を取消
+                </button>
+                </form>
+            </div>
+
+            {{-- 折りたたみ：編集フォーム --}}
+            <details class="c-resv__edit">
+                <summary class="c-resv__edit-summary">予約内容を変更する</summary>
+
+                @if ($errors->any())
+                <ul class="c-errors">@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+                @endif
+
+                <form method="post" action="{{ route('reservations.update', $r) }}" class="c-form">
+                @csrf @method('put')
+                <label class="c-field">
+                    <span class="c-field__label">予約日（翌日以降）</span>
+                    <input type="date" name="reserve_date"
+                        value="{{ old('reserve_date', $r->reserve_date->format('Y-m-d')) }}"
+                        min="{{ now()->addDay()->toDateString() }}" required>
+                </label>
+
+                <label class="c-field">
+                    <span class="c-field__label">予約時間</span>
+                    <input type="time" name="reserve_time"
+                        value="{{ old('reserve_time', \Carbon\Carbon::parse($r->reserve_time)->format('H:i')) }}"
+                        required>
+                </label>
+
+                <label class="c-field">
+                    <span class="c-field__label">人数（1〜20）</span>
+                    <input type="number" name="number_of_people" min="1" max="20"
+                        value="{{ old('number_of_people', $r->number_of_people) }}" required>
+                </label>
+
+                <label class="c-field">
+                    <span class="c-field__label">備考（任意）</span>
+                    <textarea name="note" rows="3" maxlength="255">{{ old('note', $r->note) }}</textarea>
+                </label>
+
+                <div class="c-form__actions">
+                    <button class="c-button" type="submit">この内容で更新</button>
+                    <button class="c-button c-button--ghost" type="button"
+                    onclick="this.closest('.c-resv').querySelector('.c-resv__edit').open = false;">閉じる</button>
+                </div>
+                </form>
+            </details>
+
+            {{-- 折りたたみ：QR表示（simple-qrcode使用） --}}
+            <details class="c-resv__qr">
+                <summary class="c-resv__qr-summary">QRコードを表示する</summary>
+                <div class="c-resv__qr-box" aria-label="来店時に店舗へ提示するQRコード">
+                {!! QrCode::size(180)->generate(route('qr.verify', ['token' => $r->qr_token])) !!}
+                <p class="c-resv__qr-note">店舗でQRを提示してください。</p>
+                </div>
+            </details>
+            </article>
+        @empty
+            <p class="p-mypage__empty">明日以降の予約はありません。</p>
+        @endforelse
         </div>
 
         {{-- お気に入り --}}

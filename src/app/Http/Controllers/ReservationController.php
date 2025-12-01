@@ -32,6 +32,25 @@ class ReservationController extends Controller
     }
 
     /**
+     * 予約更新
+     */
+    public function update(ReservationUpdateRequest $request, Reservation $reservation): RedirectResponse
+    {
+        if ($reservation->user_id !== Auth::id()) {
+            return redirect()->route('mypage.index')->with('error', '権限がありません。');
+        }
+        if (!$reservation->isEditable()) {
+            return redirect()->route('mypage.index')->with('error', '当日の予約は変更できません。');
+        }
+
+        $reservation->update($request->validated());
+
+        // ↓ 予約カードのアンカーへ戻す（マイページ内で“移動なし”の体感）
+        return redirect()->to(route('mypage.index') . '#resv-' . $reservation->id)
+            ->with('success', '予約内容を更新しました。');
+    }
+
+    /**
      * 完了ページ（静的ビュー）
      */
     public function done()
