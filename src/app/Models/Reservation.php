@@ -15,6 +15,8 @@ class Reservation extends Model
         'reserve_time',
         'number_of_people',
         'note',
+        'qr_token',
+        'visited_at',
         'payment_method',
         'payment_status',
         'amount',
@@ -24,10 +26,12 @@ class Reservation extends Model
     ];
 
     protected $casts = [
-        'reserve_date' => 'date', // Y-m-d
-        'reserve_time' => 'datetime:H:i',
+        'reserve_date' => 'date:Y-m-d',
+        'reserve_time' => 'string',
+        'visited_at'   => 'datetime',
     ];
 
+    // -------- リレーション --------
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -38,30 +42,45 @@ class Reservation extends Model
         return $this->belongsTo(Shop::class);
     }
 
-    // 予約のJST日時（バリデーション整合チェックや並び替えに便利）
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
+
+    // -------- 便利アクセサ/メソッド --------
+    /** HH:MM に丸めて取得 */
+    public function getReserveTimeHmAttribute(): string
+    {
+        return substr((string) $this->reserve_time, 0, 5);
+    }
+
+    /** 予約のローカル日時（比較・並び替え用） */
     public function startAt(): Carbon
     {
+        $tz   = config('app.timezone', 'Asia/Tokyo');
         $date = $this->reserve_date instanceof \DateTimeInterface
             ? $this->reserve_date->format('Y-m-d')
             : (string) $this->reserve_date;
 
-        return Carbon::parse("{$date} {$this->reserve_time}", 'Asia/Tokyo');
+        return Carbon::parse("$date {$this->reserve_time_hm}", $tz);
     }
 
+    /** 明日以降のみ（当日NG方針） */
     public function scopeUpcoming($query)
     {
         return $query->where('reserve_date', '>', now()->toDateString());
     }
 
-    public function scopeFuture($query)
+    /** 日付→時刻の昇順ソート */
+    public function scopeOrderBySchedule($query)
     {
-        $now = Carbon::now();
-        return $query->where(function ($q) use ($now) {
-            $q->where('reserve_date', '>', $now->toDateString())
-                ->orWhere(function ($qq) use ($now) {
-                    $qq->where('reserve_date', $now->toDateString())
-                    ->where('reserve_time', '>=', $now->format('H:i:00'));
-            });
-        });
+        return $query->orderBy('reserve_date')->orderBy('reserve_time');
+    }
+
+    /** 当日NGなので、明日以降のみ編集可 */
+    public function isEditable(): bool
+    {
+        return $this->reserve_date > now()->toDateString();
     }
 }
+
