@@ -40,4 +40,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])
     ->whereNumber('reservation')
     ->name('reservations.destroy');
+
+// 👇 オーナー用
+Route::prefix('owner')
+    ->name('owner.')
+    ->middleware(['auth', 'role:owner'])
+    ->group(function () {
+        Route::get('/', [OwnerDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // 予約一覧・店舗編集などはこの中に生やす
+        // Route::get('/reservations', ...);
+        // Route::get('/shops', ...);
+    });
+
+// 👇 管理者用
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // 店舗代表者アカウント管理・お知らせメール送信など
+        // Route::get('/owners', ...);
+        // Route::get('/notifications/create', ...);
+    });
 });

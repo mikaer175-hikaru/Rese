@@ -13,16 +13,30 @@
     <header class="c-header">
         <div class="c-header__inner">
             <a href="{{ url('/') }}" class="c-header__logo">Rese</a>
-            <nav class="c-header__nav">
+            <nav class="c-header__nav" aria-label="グローバルナビゲーション">
+                <a href="{{ route('shops.index') }}" class="c-header__link">店舗一覧</a>
+
                 @auth
-                    <a href="{{ url('/mypage') }}" class="c-header__link">マイページ</a>
-                    <form action="{{ route('logout') }}" method="post" class="c-header__logout">
-                        @csrf <button class="c-button c-button--ghost">ログアウト</button>
+                    {{-- 全ログインユーザー共通メニュー --}}
+                    @php /** @var \App\Models\User $user */ $user = auth()->user(); @endphp
+
+                    <a href="{{ route('mypage') }}" class="c-header__link">マイページ</a>
+
+                    @if ($user->isOwner())
+                        <a href="{{ route('owner.dashboard') }}" class="c-header__link">店舗管理</a>
+                    @elseif ($user->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}" class="c-header__link">管理者メニュー</a>
+                    @endif
+
+                    <form method="POST" action="{{ route('logout') }}" class="c-header__form">
+                        @csrf
+                        <button type="submit" class="c-header__button">ログアウト</button>
                     </form>
-                @else
-                    <a href="{{ url('/login') }}" class="c-header__link">ログイン</a>
-                    <a href="{{ url('/register') }}" class="c-header__link">会員登録</a>
                 @endauth
+
+                @guest
+                    <a href="{{ route('login') }}" class="c-header__link">ログイン</a>
+                @endguest
             </nav>
         </div>
     </header>

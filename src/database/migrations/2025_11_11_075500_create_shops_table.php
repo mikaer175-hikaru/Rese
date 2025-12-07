@@ -10,14 +10,25 @@ return new class extends Migration {
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
 
+            // オーナー（店舗代表者）
+            $table->foreignId('owner_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+
             // 基本情報
-            $table->string('name', 191)->index();  // 店舗名（部分一致検索用にindex）
+            $table->string('name', 191)->index();
             $table->string('image_url', 512)->nullable();
             $table->text('description')->nullable();
 
             // 紐づき（必ず存在するので外部キー制約つき）
-            $table->foreignId('area_id')->constrained()->cascadeOnDelete()->restrictOnDelete();
-            $table->foreignId('genre_id')->constrained()->cascadeOnDelete()->restrictOnDelete();
+            $table->foreignId('area_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->restrictOnDelete();
+            $table->foreignId('genre_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->restrictOnDelete();
 
             $table->timestamps();
 
