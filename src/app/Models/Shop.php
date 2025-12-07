@@ -21,6 +21,11 @@ class Shop extends Model
         return $this->belongsTo(Area::class);
     }
 
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
     public function genre(): BelongsTo
     {
         return $this->belongsTo(Genre::class);
