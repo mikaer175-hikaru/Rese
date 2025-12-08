@@ -21,6 +21,11 @@ return new class extends Migration
             $table->unsignedTinyInteger('number_of_people');     // 1〜20想定
             $table->string('note', 255)->nullable();
 
+            // ▼ 予約状態: normal | cancelled
+            $table->string('status', 20)
+                ->default('normal')
+                ->comment('予約状態: normal|cancelled');
+
             // ★ QR / 来店（ここにまとめて定義しておくと後がラク）
             $table->string('qr_token', 191)->nullable()->unique();
             $table->timestamp('visited_at')->nullable();

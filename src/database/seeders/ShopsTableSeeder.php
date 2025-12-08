@@ -5,12 +5,24 @@ namespace Database\Seeders;
 use App\Models\Area;
 use App\Models\Genre;
 use App\Models\Shop;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 
 class ShopsTableSeeder extends Seeder
 {
     public function run(): void
     {
+        // 店舗代表者ユーザーを1人用意（あれば取得、なければ作成）
+        $owner = User::firstOrCreate(
+            ['email' => 'owner@example.com'],
+            [
+                'name'     => '店舗代表者1',
+                'password' => Hash::make('password'), // 開発用なので簡単でOK
+                'role'     => 'owner',                 // add_role_to_users_table で追加済み想定
+            ]
+        );
+
         // 参照テーブルのマップ（名前 => id）
         $areaMap  = Area::pluck('id', 'name')->all();
         $genreMap = Genre::pluck('id', 'name')->all();
@@ -54,6 +66,7 @@ class ShopsTableSeeder extends Seeder
                     'description' => $r['desc'],
                     'area_id'     => $areaId,
                     'genre_id'    => $genreId,
+                    'owner_id'    => $owner->id,
                 ]
             );
         }
