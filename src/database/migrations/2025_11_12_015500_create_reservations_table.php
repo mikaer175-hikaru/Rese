@@ -58,6 +58,7 @@ return new class extends Migration
             // よく使う絞り込み用
             $table->index(['payment_status', 'shop_id'], 'idx_reservations_payment_status_shop');
             $table->index(['reserve_date', 'reserve_time']); // 予約一覧の並び替えなど
+            $table->index(['status', 'shop_id'], 'idx_reservations_status_shop');// 予約状態＋店舗での絞り込み
         });
     }
 

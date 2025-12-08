@@ -49,6 +49,8 @@ Route::prefix('owner')
         Route::get('/', [OwnerDashboardController::class, 'index'])
             ->name('dashboard');
 
+        Route::get('/owner/reservations', [OwnerReservationController::class, 'index'])
+            ->name('owner.reservations.index');
         // 予約一覧・店舗編集などはこの中に生やす
         // Route::get('/reservations', ...);
         // Route::get('/shops', ...);

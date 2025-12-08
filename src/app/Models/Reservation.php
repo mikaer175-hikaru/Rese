@@ -23,6 +23,7 @@ class Reservation extends Model
         'currency',
         'stripe_payment_intent_id',
         'stripe_checkout_session_id',
+        'status',
     ];
 
     protected $casts = [
@@ -81,6 +82,15 @@ class Reservation extends Model
     public function isEditable(): bool
     {
         return $this->reserve_date > now()->toDateString();
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        if ($this->status === 'cancelled') {
+            return 'キャンセル済み';
+        }
+
+        return '通常';
     }
 }
 

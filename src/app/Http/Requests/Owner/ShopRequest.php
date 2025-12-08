@@ -1,96 +1,47 @@
 <?php
 
-namespace App\Http\Controllers\Owner;
+namespace App\Http\Requests\Owner;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Owner\ShopRequest;
-use App\Models\Area;
-use App\Models\Genre;
-use App\Models\Shop;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
+use Illuminate\Foundation\Http\FormRequest;
 
-class ShopController extends Controller
+class ShopRequest extends FormRequest
 {
-    public function index(): View
+    public function authorize(): bool
     {
-        $owner = auth()->user();
-
-        $shops = $owner->shops()
-            ->with(['area', 'genre'])
-            ->orderBy('id')
-            ->paginate(10);
-
-        return view('owner.shops.index', compact('shops'));
+        // owner ログイン＋roleミドルウェアで守る前提なので true でOK
+        return true;
     }
 
-    public function create(): View
+    public function rules(): array
     {
-        $areas  = Area::orderBy('id')->get();
-        $genres = Genre::orderBy('id')->get();
-
-        return view('owner.shops.create', compact('areas', 'genres'));
+        return [
+            'name'        => ['required', 'string', 'max:191'],
+            'description' => ['required', 'string', 'max:1000'],
+            'area_id'     => ['required', 'integer', 'exists:areas,id'],
+            'genre_id'    => ['required', 'integer', 'exists:genres,id'],
+            // 新規作成時は必須、更新時は任意にするイメージ
+            'image'       => [
+                $this->isMethod('post') ? 'required' : 'nullable',
+                'file',
+                'image',
+                'mimes:jpeg,png',
+                'max:5120',
+            ],
+        ];
     }
 
-    public function store(ShopRequest $request): RedirectResponse
+    public function messages(): array
     {
-        $owner = auth()->user();
-
-        $data = $request->validated();
-        $data['owner_id'] = $owner->id;
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('shop_images', 'public');
-            $data['image_path'] = $path; // shopsテーブル側のカラム名に合わせて
-        }
-
-        Shop::create($data);
-
-        return redirect()
-            ->route('owner.shops.index')
-            ->with('status', '店舗を登録しました');
-    }
-
-    public function edit(Shop $shop): View
-    {
-        $this->authorizeOwner($shop);
-
-        $areas  = Area::orderBy('id')->get();
-        $genres = Genre::orderBy('id')->get();
-
-        return view('owner.shops.edit', compact('shop', 'areas', 'genres'));
-    }
-
-    public function update(ShopRequest $request, Shop $shop): RedirectResponse
-    {
-        $this->authorizeOwner($shop);
-
-        $data = $request->validated();
-
-        if ($request->hasFile('image')) {
-            if ($shop->image_path) {
-                Storage::disk('public')->delete($shop->image_path);
-            }
-
-            $path = $request->file('image')->store('shop_images', 'public');
-            $data['image_path'] = $path;
-        }
-
-        $shop->update($data);
-
-        return redirect()
-            ->route('owner.shops.index')
-            ->with('status', '店舗情報を更新しました');
-    }
-
-    private function authorizeOwner(Shop $shop): void
-    {
-        $owner = auth()->user();
-
-        if ($shop->owner_id !== $owner->id) {
-            abort(403);
-        }
+        return [
+            'name.required'        => '店舗名を入力してください',
+            'description.required' => '店舗説明を入力してください',
+            'area_id.required'     => 'エリアを選択してください',
+            'genre_id.required'    => 'ジャンルを選択してください',
+            'image.required'       => '店舗画像を選択してください',
+            'image.image'          => '店舗画像は画像ファイルを選択してください',
+            'image.mimes'          => '店舗画像はjpegまたはpng形式でアップロードしてください',
+            'image.max'            => '店舗画像のサイズが大きすぎます',
+        ];
     }
 }
 
