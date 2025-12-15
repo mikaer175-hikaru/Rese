@@ -30,6 +30,11 @@ return new class extends Migration
             $table->string('qr_token', 191)->nullable()->unique();
             $table->timestamp('visited_at')->nullable();
 
+            // ▼ リマインド送信済み（同日二重送信防止）
+            $table->timestamp('reminder_sent_at')
+                ->nullable()
+                ->comment('リマインドメール送信日時');
+
             // ▼ 決済方法: none | card
             $table->string('payment_method', 20)
                 ->default('none')

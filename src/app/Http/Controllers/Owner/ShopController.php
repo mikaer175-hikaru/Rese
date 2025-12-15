@@ -41,8 +41,8 @@ class ShopController extends Controller
         $data['owner_id'] = $owner->id;
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('shop_images', 'public');
-            $data['image_path'] = $path; // shopsテーブル側のカラム名に合わせて
+            $path = $request->file('image')->store('shop_images');
+            $data['image_url'] = $path;
         }
 
         Shop::create($data);
@@ -69,12 +69,12 @@ class ShopController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
-            if ($shop->image_path) {
-                Storage::disk('public')->delete($shop->image_path);
+            if ($shop->image_url) {
+                Storage::delete($shop->image_url);
             }
 
-            $path = $request->file('image')->store('shop_images', 'public');
-            $data['image_path'] = $path;
+            $path = $request->file('image')->store('shop_images');
+            $data['image_url'] = $path;
         }
 
         $shop->update($data);

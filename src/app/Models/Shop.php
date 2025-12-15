@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class Shop extends Model
 {
@@ -66,5 +69,20 @@ class Shop extends Model
             $query->where('genre_id', (int)$genreId);
         }
         return $query;
+    }
+
+    public function getImageUrlAttribute($value): ?string
+    {
+        if (is_null($value) || $value === '') {
+            return null;
+        }
+
+        // すでにURLならそのまま返す（http/https）
+        if (Str::startsWith($value, ['http://', 'https://'])) {
+            return $value;
+        }
+
+        // storageの相対パス（例: shop_images/xxx.jpg）なら、diskに応じたURLへ変換
+        return Storage::url($value);
     }
 }
