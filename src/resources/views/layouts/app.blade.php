@@ -24,6 +24,7 @@
 
                     @if ($user->isOwner())
                         <a href="{{ route('owner.dashboard') }}" class="c-header__link">店舗管理</a>
+                        <a href="{{ route('owner.reservations.index') }}" class="c-header__link">予約一覧</a>
                     @elseif ($user->isAdmin())
                         <a href="{{ route('admin.dashboard') }}" class="c-header__link">管理者メニュー</a>
                     @endif

@@ -1,10 +1,18 @@
 <?php
 
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\MypageController;
 use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\MypageController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ShopController;
+
+use App\Http\Controllers\Owner\OwnerDashboardController;
+use App\Http\Controllers\Owner\ShopController as OwnerShopController;
+use App\Http\Controllers\Owner\ReservationController as OwnerReservationController;
+
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\ShopOwnerController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ShopController::class, 'index'])->name('shops.index');
@@ -19,29 +27,33 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('/mypage', fn () => view('mypage.index'))->name('mypage');
-});
 
-Route::middleware('auth')->whereNumber('shop')->group(function () {
-    Route::post('/favorites/{shop}', [FavoriteController::class, 'store'])->name('favorites.store');
-    Route::delete('/favorites/{shop}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
-});
+    Route::get('/mypage', [MypageController::class, 'index'])
+        ->middleware('verified')
+        ->name('mypage.index');
 
-Route::post('/reservations', [ReservationController::class, 'store'])
-    ->middleware(['auth', 'verified'])
-    ->name('reservations.store');
+    Route::post('/favorites/{shop}', [FavoriteController::class, 'store'])
+        ->whereNumber('shop')
+        ->name('favorites.store');
+
+    Route::delete('/favorites/{shop}', [FavoriteController::class, 'destroy'])
+        ->whereNumber('shop')
+        ->name('favorites.destroy');
+
+    Route::post('/reservations', [ReservationController::class, 'store'])
+        ->middleware('verified')
+        ->name('reservations.store');
+
+    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])
+        ->middleware('verified')
+        ->whereNumber('reservation')
+        ->name('reservations.destroy');
+});
 
 Route::get('/done', [ReservationController::class, 'done'])
     ->name('reservations.done');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/mypage', [MypageController::class, 'index'])->name('mypage.index');
-
-Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])
-    ->whereNumber('reservation')
-    ->name('reservations.destroy');
-
-// 👇 オーナー用
+// 👇 オーナー用（verified なしでOK、必要なら付ける）
 Route::prefix('owner')
     ->name('owner.')
     ->middleware(['auth', 'role:owner'])
@@ -49,11 +61,25 @@ Route::prefix('owner')
         Route::get('/', [OwnerDashboardController::class, 'index'])
             ->name('dashboard');
 
-        Route::get('/owner/reservations', [OwnerReservationController::class, 'index'])
-            ->name('owner.reservations.index');
-        // 予約一覧・店舗編集などはこの中に生やす
-        // Route::get('/reservations', ...);
-        // Route::get('/shops', ...);
+        Route::get('/shops', [OwnerShopController::class, 'index'])
+            ->name('shops.index');
+
+        Route::get('/shops/create', [OwnerShopController::class, 'create'])
+            ->name('shops.create');
+
+        Route::post('/shops', [OwnerShopController::class, 'store'])
+            ->name('shops.store');
+
+        Route::get('/shops/{shop}/edit', [OwnerShopController::class, 'edit'])
+            ->whereNumber('shop')
+            ->name('shops.edit');
+
+        Route::put('/shops/{shop}', [OwnerShopController::class, 'update'])
+            ->whereNumber('shop')
+            ->name('shops.update');
+
+        Route::get('/reservations', [OwnerReservationController::class, 'index'])
+            ->name('reservations.index');
     });
 
 // 👇 管理者用
@@ -64,8 +90,12 @@ Route::prefix('admin')
         Route::get('/', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
 
-        // 店舗代表者アカウント管理・お知らせメール送信など
-        // Route::get('/owners', ...);
-        // Route::get('/notifications/create', ...);
+        Route::get('/shop-owners', [ShopOwnerController::class, 'index'])
+            ->name('shop_owners.index');
+
+        Route::get('/shop-owners/create', [ShopOwnerController::class, 'create'])
+            ->name('shop_owners.create');
+
+        Route::post('/shop-owners', [ShopOwnerController::class, 'store'])
+            ->name('shop_owners.store');
     });
-});

@@ -1,0 +1,138 @@
+/* public/css/owner-reservations-index.css */
+
+.p-owner-reservation {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.p-owner-reservation__header {
+    margin-bottom: 16px;
+}
+
+.p-owner-reservation__title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* ---- フィルター ---- */
+
+.p-owner-reservation__filter {
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.p-owner-reservation__filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.p-owner-reservation__filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.p-owner-reservation__filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 160px;
+}
+
+.p-owner-reservation__label {
+    font-size: 14px;
+}
+
+.p-owner-reservation__select {
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.p-owner-reservation__filter-actions {
+    margin-left: auto;
+}
+
+.p-owner-reservation__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.p-owner-reservation__button--primary {
+    background: #305dff;
+    color: #fff;
+}
+
+/* ---- 一覧テーブル ---- */
+
+.p-owner-reservation__list {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.p-owner-reservation__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.p-owner-reservation__thead {
+    background: #f5f5f5;
+}
+
+.p-owner-reservation__row--head .p-owner-reservation__cell {
+    font-weight: 600;
+}
+
+.p-owner-reservation__cell {
+    padding: 8px 6px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.p-owner-reservation__row--empty .p-owner-reservation__cell {
+    text-align: center;
+    color: #666;
+}
+
+/* ---- ページネーション ---- */
+
+.p-owner-reservation__pagination {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ---- スマホ対応 ---- */
+
+@media (max-width: 768px) {
+    .p-owner-reservation__table {
+        font-size: 12px;
+    }
+
+    .p-owner-reservation__filter-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .p-owner-reservation__filter-actions {
+        margin-left: 0;
+    }
+}
