@@ -1,0 +1,102 @@
+/* public/css/pages/register.css */
+.p-register {
+    max-width: 560px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+.p-register__card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.p-register__title {
+    margin: 0 0 16px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.p-register__form {
+    display: grid;
+    gap: 14px;
+}
+
+.p-register__field {
+    display: grid;
+    gap: 6px;
+}
+
+.p-register__label {
+    display: block;
+    font-size: 13px;
+    color: #555;
+}
+
+.p-register__input {
+    width: 100%;
+    height: 38px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    line-height: 1.2;
+}
+
+.p-register__input:focus {
+    outline: 2px solid #8ec5ff;
+    outline-offset: 2px;
+    border-color: #8ec5ff;
+}
+
+.p-register__error {
+    margin: 0;
+    color: #d00;
+    font-size: 12px;
+}
+
+.p-register__button {
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #111;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+}
+
+.p-register__button:hover {
+    filter: brightness(1.05);
+}
+
+.p-register__button:focus {
+    outline: 2px solid #8ec5ff;
+    outline-offset: 2px;
+}
+
+.p-register__helper {
+    margin: 14px 0 0;
+    font-size: 13px;
+    color: #555;
+}
+
+.p-register__link {
+    color: #111;
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .p-register__card {
+        padding: 18px;
+    }
+
+    .p-register__title {
+        font-size: 18px;
+    }
+}

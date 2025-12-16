@@ -1,0 +1,58 @@
+/* public/css/pages/login.css */
+.p-login {
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+.p-login__card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.p-login__title {
+    margin: 0 0 16px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.p-login__form {
+    display: grid;
+    gap: 14px;
+}
+
+.p-login__field {
+    display: grid;
+    gap: 6px;
+}
+
+.p-login__label {
+    font-size: 13px;
+    color: #555;
+}
+
+.p-login__input {
+    height: 38px;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.p-login__error {
+    margin: 0;
+    color: #d00;
+    font-size: 12px;
+}
+
+.p-login__button {
+    margin-top: 6px;
+    height: 40px;
+    border: 1px solid #111;
+    border-radius: 8px;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+}

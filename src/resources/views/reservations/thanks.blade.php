@@ -3,7 +3,7 @@
 @section('title','登録完了')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/result.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pages/result.css') }}">
 @endsection
 
 @section('content')

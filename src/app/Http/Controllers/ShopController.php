@@ -74,7 +74,7 @@ class ShopController extends Controller
             ? $request->user()
                 ->reservations()
                 ->with('shop:id,name')
-                ->future()
+                ->upcoming()
                 ->orderBy('reserve_date')
                 ->orderBy('reserve_time')
                 ->get()

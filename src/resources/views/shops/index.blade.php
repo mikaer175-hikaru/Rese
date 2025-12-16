@@ -3,7 +3,7 @@
 @section('title','店舗一覧')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/shops-index.css') }}">
+<link rel="stylesheet" href="{{ asset('css/pages/shops-index.css') }}">
 @endsection
 
 @section('content')
@@ -78,9 +78,9 @@
         @endforelse
     </ul>
 
-    <div class="p-shop-list__pager">
-        {{ $shops->withQueryString()->links() }}
-    </div>
+    <nav class="p-shop-list__pager" aria-label="ページネーション">
+        {{ $shops->onEachSide(1)->withQueryString()->links('vendor.pagination.shops') }}
+    </nav>
 </section>
 @endsection
 

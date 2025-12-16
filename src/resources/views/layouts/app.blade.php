@@ -20,7 +20,7 @@
                     {{-- 全ログインユーザー共通メニュー --}}
                     @php /** @var \App\Models\User $user */ $user = auth()->user(); @endphp
 
-                    <a href="{{ route('mypage') }}" class="c-header__link">マイページ</a>
+                    <a href="{{ route('mypage.index') }}" class="c-header__link">マイページ</a>
 
                     @if ($user->isOwner())
                         <a href="{{ route('owner.dashboard') }}" class="c-header__link">店舗管理</a>

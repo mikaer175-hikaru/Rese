@@ -13,12 +13,6 @@
     font-weight: 700;
 }
 
-.p-shop-list__pager {
-    margin-top: 16px;
-    display: flex;
-    justify-content: center;
-}
-
 /* ========== Filter ========== */
 .c-filter {
     background: #fff;
@@ -181,21 +175,18 @@
     border-radius: 12px;
 }
 
-/* pagination（shops list） */
-.p-shop-list__pager nav {
+/* ========== Pagination ========== */
+.c-pagination {
     display: flex;
     justify-content: center;
-    margin-top: 16px;
 }
 
-.p-shop-list__pager nav svg {
-    width: 18px;
-    height: 18px;
-    flex: 0 0 auto;
+.c-pagination__list {
+    display: inline-flex;
+    gap: 6px;
 }
 
-.p-shop-list__pager nav a,
-.p-shop-list__pager nav span {
+.c-pagination__link {
     display: inline-flex;
     min-width: 34px;
     height: 34px;
@@ -204,11 +195,26 @@
     justify-content: center;
     border: 1px solid #ddd;
     border-radius: 8px;
-    text-decoration: none;
-    color: #111;
     background: #fff;
+    color: #111;
+    text-decoration: none;
     font-size: 14px;
-    line-height: 1;
+}
+
+.c-pagination__link--active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+.c-pagination__link--disabled {
+    opacity: .5;
+    pointer-events: none;
+}
+
+.c-pagination__icon {
+    width: 14px;
+    height: 14px;
 }
 
 /* ========== Responsive ========== */
