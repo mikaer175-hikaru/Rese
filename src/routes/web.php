@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\ShopOwnerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ShopController::class, 'index'])->name('shops.index');
-Route::get('/detail/{shop}', [ShopController::class, 'show'])->name('shops.show');
+Route::get('/detail/{shop}', [ShopController::class, 'show'])->name('shops.detail');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showForm'])->name('login');

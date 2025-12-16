@@ -1,5 +1,5 @@
 # Rese
-.evn.local
+.env.local
 APP_NAME=Rese
 APP_ENV=local
 APP_KEY=base64:lOYJ7JLUmzJXd9HCLq++8fRn3vTCmG4LE7xq3oakCcc=
@@ -51,7 +51,7 @@ VITE_APP_NAME="${APP_NAME}"
 
 FILESYSTEM_DISK=public
 
-.evn.production
+.env.production
 APP_NAME=Rese
 APP_ENV=production
 APP_KEY=base64:lOYJ7JLUmzJXd9HCLq++8fRn3vTCmG4LE7xq3oakCcc=

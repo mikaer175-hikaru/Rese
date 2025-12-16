@@ -181,18 +181,21 @@
     border-radius: 12px;
 }
 
-/* ========== Pagination (Laravel default markup) ========== */
-.pagination {
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 8px 0 0;
+/* pagination（shops list） */
+.p-shop-list__pager nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
 }
 
-.pagination li>span,
-.pagination li>a {
+.p-shop-list__pager nav svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+}
+
+.p-shop-list__pager nav a,
+.p-shop-list__pager nav span {
     display: inline-flex;
     min-width: 34px;
     height: 34px;
@@ -205,22 +208,7 @@
     color: #111;
     background: #fff;
     font-size: 14px;
-}
-
-.pagination li>a:hover {
-    filter: brightness(1.03);
-}
-
-.pagination .active>span {
-    background: #111;
-    color: #fff;
-    border-color: #111;
-}
-
-.pagination .disabled>span,
-.pagination .disabled>a {
-    opacity: .5;
-    pointer-events: none;
+    line-height: 1;
 }
 
 /* ========== Responsive ========== */
